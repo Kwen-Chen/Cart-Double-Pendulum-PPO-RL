@@ -1,0 +1,9 @@
+pygame==2.6.1
+numpy==1.24.3
+torch==2.1.0
+stable-baselines3==2.2.1
+gymnasium==0.29.1
+matplotlib==3.7.2
+tensorboard==2.14.1
+opencv-python==4.8.1.78
+protobuf==4.25.1 

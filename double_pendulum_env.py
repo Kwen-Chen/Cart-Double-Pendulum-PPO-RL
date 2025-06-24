@@ -195,10 +195,10 @@ class CartDoublePendulumEnv:
         F1 = (force + (self.m1 + self.m2) * self.l1 * theta1_dot**2 * s1 
               + self.m2 * self.l2 * theta2_dot**2 * s2)
         
-        F2 = (-(self.m1 + self.m2) * self.g * self.l1 * s1 
+        F2 = -(-(self.m1 + self.m2) * self.g * self.l1 * s1 
               + self.m2 * self.l1 * self.l2 * theta2_dot**2 * s12)
         
-        F3 = (-self.m2 * self.g * self.l2 * s2 
+        F3 = -(-self.m2 * self.g * self.l2 * s2 
               - self.m2 * self.l1 * self.l2 * theta1_dot**2 * s12)
         
         # Construct mass matrix and force vector

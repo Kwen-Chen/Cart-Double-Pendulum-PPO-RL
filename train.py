@@ -122,7 +122,7 @@ def train_cart_double_pendulum():
     )
     
     # Train the model
-    total_timesteps = 500000
+    total_timesteps = 1000000
     print(f"开始训练，总时间步数: {total_timesteps}")
     
     model.learn(

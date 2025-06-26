@@ -1,11 +1,11 @@
-# Cart Double Pendulum PPO Reinforcement Learning
+# Cart Double Pendulum Multi-Algorithm Reinforcement Learning
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1+-red.svg)](https://pytorch.org/)
 [![Stable-Baselines3](https://img.shields.io/badge/SB3-2.2+-green.svg)](https://stable-baselines3.readthedocs.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A reinforcement learning project that trains an agent to balance a double pendulum on a cart using PPO (Proximal Policy Optimization) algorithm with pygame visualization.
+A reinforcement learning project that trains an agent to balance a double pendulum on a cart using multiple algorithms including PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic), and DDPG (Deep Deterministic Policy Gradient) with pygame visualization.
 
 ## 🎯 Training Results
 
@@ -14,8 +14,6 @@ A reinforcement learning project that trains an agent to balance a double pendul
 
 ### After Training (PPO Policy)
 ![Training Result](assets/after.gif)
-
-
 
 ## 🎯 Project Overview
 
@@ -28,11 +26,14 @@ The system consists of:
 
 ### Key Features
 - **Real-time Physics Simulation**: High-precision physics modeling using pygame with fourth-order Runge-Kutta integration
-- **PPO Reinforcement Learning**: Advanced policy gradient method for continuous control
+- **Multi-Algorithm Support**: Choose from PPO, SAC, or DDPG algorithms for training
+- **PPO (Proximal Policy Optimization)**: On-policy algorithm with stable performance
+- **SAC (Soft Actor-Critic)**: Off-policy algorithm with entropy regularization for exploration
+- **DDPG (Deep Deterministic Policy Gradient)**: Off-policy algorithm for continuous control
 - **Comprehensive Visualization**: Real-time rendering and training progress monitoring
 - **Multi-mode Demonstration**: Random control, PD controller, keyboard control for comparison
 - **Configurable Parameters**: Adjustable environment and training parameters
-- **TensorBoard Integration**: Detailed training metrics and visualization
+- **TensorBoard Integration**: Detailed training metrics and visualization for each algorithm
 
 ## 🚀 Quick Start
 
@@ -69,19 +70,46 @@ The system consists of:
 python start.py
 ```
 
-**Train the Model:**
+**Train with Different Algorithms:**
 ```bash
-python train.py --mode train
+# Train with PPO (default)
+python train.py --mode train --algorithm PPO
+
+# Train with SAC
+python train.py --mode train --algorithm SAC
+
+# Train with DDPG
+python train.py --mode train --algorithm DDPG
+
+# Custom training timesteps
+python train.py --mode train --algorithm PPO --timesteps 500000
 ```
 
-**Test Trained Model:**
+**Test Trained Models:**
 ```bash
-python train.py --mode test --episodes 5
+# Test PPO model
+python train.py --mode test --algorithm PPO --episodes 5
+
+# Test SAC model
+python train.py --mode test --algorithm SAC --episodes 5
+
+# Test DDPG model
+python train.py --mode test --algorithm DDPG --episodes 5
+
+# Test with custom model path
+python train.py --mode test --model_path models/ppo/custom_model.zip --algorithm PPO
 ```
 
 **View Training Results:**
 ```bash
-python train.py --mode plot
+# View PPO training results
+python train.py --mode plot --algorithm PPO
+
+# View SAC training results
+python train.py --mode plot --algorithm SAC
+
+# View DDPG training results
+python train.py --mode plot --algorithm DDPG
 ```
 
 **Demo Environment:**
@@ -93,7 +121,7 @@ python demo.py
 ```
 Cart-Double-Pendulum-PPO-RL/
 ├── double_pendulum_env.py    # Cart double pendulum environment implementation
-├── train.py                  # Training and testing script
+├── train.py                  # Training and testing script (multi-algorithm support)
 ├── demo.py                   # Demonstration script
 ├── start.py                  # Quick start script
 ├── requirements.txt          # Project dependencies
@@ -103,31 +131,36 @@ Cart-Double-Pendulum-PPO-RL/
 │   ├── before.gif            # Before training animation
 │   └── after.gif            # After training animation
 ├── models/                   # Trained model checkpoints
-│   ├── best_model.zip        # Best performing model
-│   └── cart_double_pendulum_ppo_final.zip
-├── logs/                     # Training logs
-│   ├── *.monitor.csv         # Episode monitoring data
-│   └── *.log                 # Training logs
+│   ├── ppo/                  # PPO models
+│   │   ├── best_model.zip
+│   │   └── cart_double_pendulum_ppo_final.zip
+│   ├── sac/                  # SAC models
+│   │   ├── best_model.zip
+│   │   └── cart_double_pendulum_sac_final.zip
+│   └── ddpg/                 # DDPG models
+│       ├── best_model.zip
+│       └── cart_double_pendulum_ddpg_final.zip
+├── logs/                     # Training logs (algorithm-specific)
+│   ├── ppo/                  # PPO training logs
+│   ├── sac/                  # SAC training logs
+│   └── ddpg/                 # DDPG training logs
 └── tensorboard_logs/         # TensorBoard logs
-    └── PPO_*/                # PPO training sessions
+    ├── PPO/                  # PPO training sessions
+    ├── SAC/                  # SAC training sessions
+    └── DDPG/                 # DDPG training sessions
 ```
 
-## 📈 Experimental Results
 
-### Performance Metrics
-- **Maximum Episode Length**: 1000+ steps
-- **Average Reward**: 900+ (trained model)
-- **Balance Success Rate**: >95%
-- **Training Convergence**: ~500K timesteps
+## 📈 Experimental Results (Multi-Algorithm Comparison)
 
-### Training Configuration
-- **Algorithm**: PPO (Proximal Policy Optimization)
-- **Total Training Steps**: 500,000
-- **Parallel Environments**: 4
-- **Network Architecture**: Multi-layer Perceptron
-- **Learning Rate**: 3e-4
-- **Batch Size**: 64
-- **Discount Factor**: 0.99
+### DDPG Training Curves
+![DDPG Training Results](assets/ddpg_training_results.png)
+
+### PPO Training Curves
+![PPO Training Results](assets/ppo_training_results.png)
+
+### SAC Training Curves
+![SAC Training Results](assets/sac_training_results.png)
 
 ## 🔧 Environment Specification
 
@@ -167,8 +200,9 @@ Cart-Double-Pendulum-PPO-RL/
 ## 🔧 Configuration
 
 ### Training Parameters
+
+#### PPO Configuration
 ```python
-# PPO Configuration
 learning_rate = 3e-4
 n_steps = 2048
 batch_size = 64
@@ -176,6 +210,33 @@ n_epochs = 10
 gamma = 0.99
 gae_lambda = 0.95
 clip_range = 0.2
+ent_coef = 0.01
+```
+
+#### SAC Configuration
+```python
+learning_rate = 3e-4
+buffer_size = 1000000
+learning_starts = 10000
+batch_size = 256
+tau = 0.005
+gamma = 0.99
+train_freq = 1
+gradient_steps = 1
+ent_coef = "auto"  # Auto-tuned entropy coefficient
+```
+
+#### DDPG Configuration
+```python
+learning_rate = 1e-3
+buffer_size = 1000000
+learning_starts = 10000
+batch_size = 128
+tau = 0.005
+gamma = 0.99
+train_freq = 1
+gradient_steps = 1
+action_noise = NormalActionNoise(mean=0, sigma=0.1)
 ```
 
 ### Environment Parameters
@@ -191,12 +252,24 @@ max_force = 20.0       # N
 
 ## 🔧 Usage Examples
 
-### Basic Training
+### Basic Training with Different Algorithms
 ```python
 from train import train_cart_double_pendulum
 
-# Start training with default configuration
-model, eval_env = train_cart_double_pendulum()
+# Train with PPO (default)
+model, eval_env = train_cart_double_pendulum(algorithm="PPO")
+
+# Train with SAC
+model, eval_env = train_cart_double_pendulum(algorithm="SAC")
+
+# Train with DDPG
+model, eval_env = train_cart_double_pendulum(algorithm="DDPG")
+
+# Custom timesteps
+model, eval_env = train_cart_double_pendulum(
+    algorithm="SAC", 
+    total_timesteps=500000
+)
 ```
 
 ### Custom Environment
@@ -210,28 +283,53 @@ env = CartDoublePendulumEnv(
 )
 ```
 
-### Load Trained Model
+### Load and Test Trained Models
 ```python
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, SAC, DDPG
 
-# Load trained model
-model = PPO.load("models/cart_double_pendulum_ppo_final.zip")
+# Load PPO model
+ppo_model = PPO.load("models/ppo/cart_double_pendulum_ppo_final.zip")
 
-# Test the model
+# Load SAC model
+sac_model = SAC.load("models/sac/cart_double_pendulum_sac_final.zip")
+
+# Load DDPG model
+ddpg_model = DDPG.load("models/ddpg/cart_double_pendulum_ddpg_final.zip")
+
+# Test any model
 obs, _ = env.reset()
-action, _ = model.predict(obs, deterministic=True)
+action, _ = ppo_model.predict(obs, deterministic=True)
+```
+
+### Algorithm Selection Guide
+```python
+# Choose algorithm based on your needs:
+
+# For stable training and learning RL basics:
+model = train_cart_double_pendulum(algorithm="PPO")
+
+# For sample efficiency and exploration:
+model = train_cart_double_pendulum(algorithm="SAC")
+
+# For deterministic policies and fast convergence:
+model = train_cart_double_pendulum(algorithm="DDPG")
 ```
 
 ## 📊 Training Monitoring
 
-### Training Performance
-![Training Curves](assets/training_results.png)
-
-
 ### TensorBoard
-Monitor training progress in real-time:
+Monitor training progress in real-time for different algorithms:
 ```bash
+# View all algorithms
 tensorboard --logdir=tensorboard_logs
+
+# View specific algorithm
+tensorboard --logdir=tensorboard_logs/PPO
+tensorboard --logdir=tensorboard_logs/SAC
+tensorboard --logdir=tensorboard_logs/DDPG
+
+# Compare algorithms
+tensorboard --logdir=tensorboard_logs --port=6006
 ```
 
 ### Training Analytics
@@ -240,32 +338,6 @@ tensorboard --logdir=tensorboard_logs
 - Entropy coefficient tracking
 - Learning rate scheduling
 - Environment interaction statistics
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **CUDA Out of Memory**
-   - Reduce number of parallel environments
-   - Use CPU training: `device="cpu"`
-   - Decrease batch size
-
-2. **Pygame Display Issues**
-   - Ensure graphics support is available
-   - Use headless mode: `render_mode=None`
-   - Check OpenGL compatibility
-
-3. **Training Convergence Issues**
-   - Adjust learning rate (try 1e-4 to 1e-3)
-   - Modify reward function parameters
-   - Increase training timesteps
-   - Tune PPO hyperparameters
-
-4. **Model Performance Issues**
-   - Check reward function design
-   - Verify environment termination conditions
-   - Adjust physical parameters
-   - Review network architecture
 
 ## 🤝 Contributing
 
@@ -298,10 +370,16 @@ For questions or suggestions, please:
 
 ## 📚 Related Resources
 
-- [PPO Paper](https://arxiv.org/abs/1707.06347)
+### Algorithm Papers
+- [PPO Paper](https://arxiv.org/abs/1707.06347) - Proximal Policy Optimization Algorithms
+- [SAC Paper](https://arxiv.org/abs/1801.01290) - Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL
+- [DDPG Paper](https://arxiv.org/abs/1509.02971) - Continuous Control with Deep Reinforcement Learning
+
+### Documentation & Resources
 - [Stable-Baselines3 Documentation](https://stable-baselines3.readthedocs.io/)
 - [Gymnasium Documentation](https://gymnasium.farama.org/)
 - [Classical Control Problems](https://gym.openai.com/envs/#classic_control)
+- [RL Algorithm Comparison](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)
 
 ## ⭐ Project History
 

@@ -204,3 +204,7 @@ model_comparison_*.txt
 # assets/*.png
 # assets/*.jpg
 # assets/*.jpeg 
+
+models/ddpg/
+models/ppo/
+models/sac/
